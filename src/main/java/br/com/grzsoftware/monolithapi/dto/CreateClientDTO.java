@@ -1,35 +1,43 @@
 package br.com.grzsoftware.monolithapi.dto;
 
 import br.com.grzsoftware.monolithapi.model.Address;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.br.CPF;
 
 public class CreateClientDTO {
     @NotNull
     @Size(min = 2, max = 50)
+    @Schema(description = "Client name", example = "James")
     private String name;
 
     @NotNull
     @Email
+    @Schema(description = "Client email", example = "james@example.com")
     private String email;
 
     @NotNull
     @Size(min = 9, max = 50)
+    @Schema(description = "Client phone number", example = "99999999999")
     private String phone;
 
     @NotNull
-    @Size(min = 11, max = 11)
+    @CPF
+    @Schema(description = "Client CPF", example = "11111111111")
     private String cpf;
 
     @NotNull
+    @Schema(description = "Client RG", example = "11111111")
     private String rg;
 
-    private Address address;
+    @Schema(description = "Client address")
+    private AddressDto address;
 
     public CreateClientDTO() {}
 
-    public CreateClientDTO(String name, String email, String phone, String cpf, String rg, Address address) {
+    public CreateClientDTO(String name, String email, String phone, String cpf, String rg, AddressDto address) {
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -66,7 +74,7 @@ public class CreateClientDTO {
         this.rg = rg;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressDto address) {
         this.address = address;
     }
 
@@ -90,7 +98,7 @@ public class CreateClientDTO {
         return rg;
     }
 
-    public Address getAddress() {
+    public AddressDto getAddress() {
         return address;
     }
 }

@@ -10,12 +10,15 @@ public class Client {
 
     private String name;
 
+    @Column(unique = true)
     private String email;
 
     private String phone;
 
+    @Column(unique = true)
     private String cpf;
 
+    @Column(unique = true)
     private String rg;
 
     @ManyToOne

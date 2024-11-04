@@ -2,8 +2,6 @@ package br.com.grzsoftware.monolithapi.exception;
 
 import org.springframework.http.HttpStatus;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
