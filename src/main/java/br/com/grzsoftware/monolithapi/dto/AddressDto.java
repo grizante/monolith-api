@@ -5,8 +5,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class AddressDto {
     @Schema(description = "Street where client lives", example = "Rua xxx, Bairro x, Número 1")
     private String street;
+
     @Schema(description = "City where client lives", example = "São Paulo")
     private String city;
+
     @Schema(description = "State where client lives", example = "São Paulo")
     private String state;
 

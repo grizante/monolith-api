@@ -1,6 +1,7 @@
 package br.com.grzsoftware.monolithapi.controller;
 
 import br.com.grzsoftware.monolithapi.dto.CreateClientDTO;
+import br.com.grzsoftware.monolithapi.dto.CreateClientResponseDto;
 import br.com.grzsoftware.monolithapi.dto.PaginationQueryDTO;
 import br.com.grzsoftware.monolithapi.model.Client;
 import br.com.grzsoftware.monolithapi.service.ClientService;
@@ -20,7 +21,7 @@ public class ClientController {
     }
 
     @PostMapping
-    public Client create(@Valid @RequestBody CreateClientDTO CreateClientDTO) {
+    public CreateClientResponseDto create(@Valid @RequestBody CreateClientDTO CreateClientDTO) {
         return clientService.createClient(CreateClientDTO);
     }
 

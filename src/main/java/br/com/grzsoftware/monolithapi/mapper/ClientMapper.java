@@ -1,6 +1,7 @@
 package br.com.grzsoftware.monolithapi.mapper;
 
 import br.com.grzsoftware.monolithapi.dto.CreateClientDTO;
+import br.com.grzsoftware.monolithapi.dto.CreateClientResponseDto;
 import br.com.grzsoftware.monolithapi.model.Client;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -10,7 +11,9 @@ import org.mapstruct.factory.Mappers;
 public interface ClientMapper {
 
     @Mapping(target = "id", ignore = true)
-    Client clientDtoToClient(CreateClientDTO createClientDTO);
+    Client createClientDtoToClient(CreateClientDTO createClientDTO);
 
-    CreateClientDTO clientToClientDto(Client client);
+    CreateClientResponseDto clientToCreateClientResponseDto(Client client);
+
+    CreateClientDTO clientToCreateClientDto(Client client);
 }
