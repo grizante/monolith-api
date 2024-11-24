@@ -77,12 +77,14 @@ public class ClientService {
     @Transactional
     public void updateClientById(Long id, UpdateClientDto clientDto) {
         clientDto.setId(id);
-        Client client = clientRepository.findById(clientDto.getId()).orElseThrow(() -> new ClientNotFoundException("Client with id " + clientDto.getId() + " does not " + "exist"));
-        if (clientDto.getAddress() != null) {
+        Client client = clientRepository.findById(clientDto.getId())
+                .orElseThrow(() -> new ClientNotFoundException("Client with id " + clientDto.getId() + " does not " + "exist"));
+        if (client.getAddress() != null) {
             Address address = addressRepository.save(addressMapper.addressDtoToAddress(clientDto.getAddress()));
             client.setAddress(address);
         }
-        clientRepository.save(client);
+        clientDto.setAddress(addressMapper.addressToAddressDto(client.getAddress()));
+        clientRepository.save(clientMapper.updateClientDtoToClient(clientDto));
     }
 
     @Transactional
