@@ -6,6 +6,7 @@ import br.com.grzsoftware.monolithapi.dto.FindAllClientsDTO;
 import br.com.grzsoftware.monolithapi.dto.UpdateClientDto;
 import br.com.grzsoftware.monolithapi.exception.ClientAlreadyExists;
 import br.com.grzsoftware.monolithapi.exception.ClientNotFoundException;
+import br.com.grzsoftware.monolithapi.mapper.AddressMapper;
 import br.com.grzsoftware.monolithapi.mapper.ClientMapper;
 import br.com.grzsoftware.monolithapi.model.Address;
 import br.com.grzsoftware.monolithapi.model.Client;
@@ -26,12 +27,14 @@ public class ClientService {
     private final ClientRepository clientRepository;
     private final AddressRepository addressRepository;
     private final ClientMapper clientMapper;
+    private final AddressMapper addressMapper;
 
     @Autowired
-    public ClientService(ClientRepository clientRepository, AddressRepository addressRepository, ClientMapper clientMapper) {
+    public ClientService(ClientRepository clientRepository, AddressRepository addressRepository, ClientMapper clientMapper, AddressMapper addressMapper) {
         this.clientRepository = clientRepository;
         this.addressRepository = addressRepository;
         this.clientMapper = clientMapper;
+        this.addressMapper = addressMapper;
     }
 
     @Transactional
@@ -74,8 +77,12 @@ public class ClientService {
     @Transactional
     public void updateClientById(Long id, UpdateClientDto clientDto) {
         clientDto.setId(id);
-        clientRepository.findById(clientDto.getId()).orElseThrow(() -> new ClientAlreadyExists("Client with id " + clientDto.getId() + " does not " + "exist"));
-        clientRepository.save(clientMapper.updateClientDtoToClient(clientDto));
+        Client client = clientRepository.findById(clientDto.getId()).orElseThrow(() -> new ClientNotFoundException("Client with id " + clientDto.getId() + " does not " + "exist"));
+        if (clientDto.getAddress() != null) {
+            Address address = addressRepository.save(addressMapper.addressDtoToAddress(clientDto.getAddress()));
+            client.setAddress(address);
+        }
+        clientRepository.save(client);
     }
 
     @Transactional
