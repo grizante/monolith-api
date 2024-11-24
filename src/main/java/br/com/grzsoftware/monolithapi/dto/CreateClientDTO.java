@@ -1,6 +1,7 @@
 package br.com.grzsoftware.monolithapi.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -32,6 +33,7 @@ public class CreateClientDTO {
     private String rg;
 
     @Schema(description = "Client address")
+    @Valid
     private AddressDTO address;
 
     public CreateClientDTO() {}
@@ -43,14 +45,6 @@ public class CreateClientDTO {
         this.cpf = cpf;
         this.rg = rg;
         this.address = address;
-    }
-
-    public CreateClientDTO(String name, String email, String phone, String cpf, String rg) {
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.cpf = cpf;
-        this.rg = rg;
     }
 
     public void setName(String name) {

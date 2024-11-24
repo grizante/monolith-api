@@ -20,12 +20,6 @@ public class AddressDTO {
     public AddressDTO() {
     }
 
-    public AddressDTO(String street, String city, String state) {
-        this.street = street;
-        this.city = city;
-        this.state = state;
-    }
-
     public String getStreet() {
         return street;
     }
