@@ -1,19 +1,26 @@
 package br.com.grzsoftware.monolithapi.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 
-public class AddressDto {
+public class AddressDTO {
+
     @Schema(description = "Street where client lives", example = "Rua xxx, Bairro x, Número 1")
+    @NotNull
     private String street;
+
     @Schema(description = "City where client lives", example = "São Paulo")
+    @NotNull
     private String city;
+
     @Schema(description = "State where client lives", example = "São Paulo")
+    @NotNull
     private String state;
 
-    public AddressDto() {
+    public AddressDTO() {
     }
 
-    public AddressDto(String street, String city, String state) {
+    public AddressDTO(String street, String city, String state) {
         this.street = street;
         this.city = city;
         this.state = state;

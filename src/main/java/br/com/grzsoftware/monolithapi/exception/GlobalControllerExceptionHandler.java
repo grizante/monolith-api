@@ -27,4 +27,5 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
 
         return new ResponseEntity<>(apiErrorMessage, apiErrorMessage.getStatus());
     }
+
 }

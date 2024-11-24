@@ -2,19 +2,16 @@ package br.com.grzsoftware.monolithapi.service;
 
 import br.com.grzsoftware.monolithapi.dto.CreateClientDTO;
 import br.com.grzsoftware.monolithapi.dto.PaginationQueryDTO;
-import br.com.grzsoftware.monolithapi.mapper.AddressMapper;
 import br.com.grzsoftware.monolithapi.mapper.ClientMapper;
-import br.com.grzsoftware.monolithapi.model.Address;
 import br.com.grzsoftware.monolithapi.model.Client;
 import br.com.grzsoftware.monolithapi.repository.AddressRepository;
 import br.com.grzsoftware.monolithapi.repository.ClientRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ClientService {
@@ -38,9 +35,15 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
+    public Client getClientById(Long id) {
+        return clientRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Client not found with id: " + id));
+    }
+
     public Page<Client> getAllClients(PaginationQueryDTO queryDTO, Sort sort) {
         Page<Client> clients = clientRepository.findAll(PageRequest.of(queryDTO.getPage(), queryDTO.getSize(), sort));
-
+        if(clients.getTotalElements() < 1) {
+            throw new EntityNotFoundException("No client found");
+        }
         return clients;
     }
 }

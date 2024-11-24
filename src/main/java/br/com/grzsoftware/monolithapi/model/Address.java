@@ -1,5 +1,6 @@
 package br.com.grzsoftware.monolithapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class Address {
     private String state;
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Client> client;
 
     public Address() {}
