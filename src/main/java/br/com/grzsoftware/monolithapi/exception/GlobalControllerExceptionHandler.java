@@ -29,8 +29,9 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
         return new ResponseEntity<>(apiErrorMessage, apiErrorMessage.getStatus());
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
+    @ExceptionHandler(ClientAlreadyExists.class)
+    public ResponseEntity<Object> handleIllegalArgumentException(ClientAlreadyExists ex,
+                                                                 WebRequest request) {
         ApiErrorMessage apiErrorMessage = new ApiErrorMessage(HttpStatus.BAD_REQUEST, ex.getMessage());
         return new ResponseEntity<>(apiErrorMessage, apiErrorMessage.getStatus());
     }

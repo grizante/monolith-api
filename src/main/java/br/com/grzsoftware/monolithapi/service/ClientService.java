@@ -1,8 +1,13 @@
 package br.com.grzsoftware.monolithapi.service;
 
-import br.com.grzsoftware.monolithapi.dto.*;
+import br.com.grzsoftware.monolithapi.dto.CreateClientDTO;
+import br.com.grzsoftware.monolithapi.dto.CreateClientResponseDto;
+import br.com.grzsoftware.monolithapi.dto.FindAllClientsDTO;
+import br.com.grzsoftware.monolithapi.dto.UpdateClientDto;
+import br.com.grzsoftware.monolithapi.exception.ClientAlreadyExists;
 import br.com.grzsoftware.monolithapi.exception.ClientNotFoundException;
 import br.com.grzsoftware.monolithapi.mapper.ClientMapper;
+import br.com.grzsoftware.monolithapi.model.Address;
 import br.com.grzsoftware.monolithapi.model.Client;
 import br.com.grzsoftware.monolithapi.repository.AddressRepository;
 import br.com.grzsoftware.monolithapi.repository.ClientRepository;
@@ -12,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -31,11 +38,22 @@ public class ClientService {
     public CreateClientResponseDto createClient(CreateClientDTO clientDto) {
         boolean isThereAClientWithEmail = clientRepository.findByEmail(clientDto.getEmail()).isPresent();
         if (isThereAClientWithEmail) {
-            throw new IllegalArgumentException("Client with email " + clientDto.getEmail() + " already exists");
+            throw new ClientAlreadyExists("Client with email " + clientDto.getEmail() + " " + "already exists");
         }
         Client client = clientMapper.createClientDtoToClient(clientDto);
-        if (client.getAddress() != null) {
-            addressRepository.save(client.getAddress());
+        Address address = client.getAddress();
+        if (address != null) {
+            String street = address.getStreet();
+            String city = address.getCity();
+            String state = address.getState();
+
+            Optional<Address> optionalAddress = addressRepository.findAddressByCityAndStreetAndState(city, street, state);
+
+            if (optionalAddress.isEmpty()) {
+                addressRepository.save(client.getAddress());
+            } else {
+                client.setAddress(optionalAddress.get());
+            }
         }
         Client savedClient = clientRepository.save(client);
         return clientMapper.clientToCreateClientResponseDto(savedClient);
@@ -56,8 +74,7 @@ public class ClientService {
     @Transactional
     public void updateClientById(Long id, UpdateClientDto clientDto) {
         clientDto.setId(id);
-        clientRepository.findById(clientDto.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Client with id " + clientDto.getId() + " does not " + "exist"));
+        clientRepository.findById(clientDto.getId()).orElseThrow(() -> new ClientAlreadyExists("Client with id " + clientDto.getId() + " does not " + "exist"));
         clientRepository.save(clientMapper.updateClientDtoToClient(clientDto));
     }
 
