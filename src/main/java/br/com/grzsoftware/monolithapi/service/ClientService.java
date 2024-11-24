@@ -1,6 +1,7 @@
 package br.com.grzsoftware.monolithapi.service;
 
 import br.com.grzsoftware.monolithapi.dto.CreateClientDTO;
+import br.com.grzsoftware.monolithapi.dto.CreateClientResponseDto;
 import br.com.grzsoftware.monolithapi.dto.PaginationQueryDTO;
 import br.com.grzsoftware.monolithapi.mapper.ClientMapper;
 import br.com.grzsoftware.monolithapi.model.Client;
@@ -27,12 +28,13 @@ public class ClientService {
         this.clientMapper = clientMapper;
     }
 
-    public Client createClient(CreateClientDTO clientDto) {
-        Client client = clientMapper.clientDtoToClient(clientDto);
+    public CreateClientResponseDto createClient(CreateClientDTO clientDto) {
+        Client client = clientMapper.createClientDtoToClient(clientDto);
         if (client.getAddress() != null) {
             addressRepository.save(client.getAddress());
         }
-        return clientRepository.save(client);
+        Client savedClient = clientRepository.save(client);
+        return clientMapper.clientToCreateClientResponseDto(savedClient);
     }
 
     public Client getClientById(Long id) {
